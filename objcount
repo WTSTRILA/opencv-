@@ -1,0 +1,24 @@
+import imutils
+import cv2
+from  matplotlib import pyplot as plt
+
+image = cv2.imread('____.jpg')
+gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+blur = cv2.GaussianBlur(gray,(5,5),0)
+thresh = cv2.adaptiveThreshold(blur,255,1,1,11,2)
+
+
+cnts = cv2.findContours(thresh, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+cnts = imutils.grab_contours(cnts)
+total= 0
+
+for c in cnts:
+	if cv2.contourArea(c) < 60:
+		continue
+	cv2.drawContours(image, [c], -1, (255, 0, 0), 3)
+	total += 1
+
+print(f'Bricks: {total} ')
+
+plt.imshow(thresh, cmap='gray')
+plt.show()
